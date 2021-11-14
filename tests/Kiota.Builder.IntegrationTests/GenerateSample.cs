@@ -57,7 +57,5 @@ namespace Kiota.Builder.integrationtests
             await new KiotaBuilder(logger, configuration).GenerateSDK();
         }
 
-
-
     }
 }
