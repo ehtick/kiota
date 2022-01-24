@@ -1,5 +1,3 @@
-import { RequestInformation } from "../requestInformation";
-
 /**
  * @interface
  * Interface to be implementated to provide authentication information for a request.
@@ -11,5 +9,5 @@ export interface AuthenticationProvider {
      * @param request the request to authenticate.
      * @return a Promise to await for the authentication to be completed.
      */
-    authenticateRequest: (request: RequestInformation) => Promise<void>;
+    authenticateRequest: (url: string, headers: Map<string, string>) => Promise<void>;
 }

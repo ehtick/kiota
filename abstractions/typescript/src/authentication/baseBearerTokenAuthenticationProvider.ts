@@ -1,5 +1,5 @@
-import { RequestInformation } from "../requestInformation";
-import { AuthenticationProvider, AccessTokenProvider } from "./authenticationProvider";
+import { AccessTokenProvider } from "./accessTokenProvider";
+import { AuthenticationProvider } from "./authenticationProvider";
 
 /** Provides a base class for implementing AuthenticationProvider for Bearer token scheme. */
 export class BaseBearerTokenAuthenticationProvider implements AuthenticationProvider {
@@ -10,20 +10,20 @@ export class BaseBearerTokenAuthenticationProvider implements AuthenticationProv
      * @param accessTokenProvider 
      */
     public constructor(private accessTokenProvider: AccessTokenProvider) { };
-    
-    public authenticateRequest = async (request: RequestInformation): Promise<void> => {
-        if (!request) {
-            throw new Error('request info cannot be null');
+
+    public authenticateRequest = async (url: string, headers: Map<string, string>): Promise<void> => {
+        if (/*custom hosts are provider &&*/!url) {
+            throw new Error('Please provide the request url to verify authentication.');
         }
-        if (!request.headers?.has(BaseBearerTokenAuthenticationProvider.authorizationHeaderKey)) {
-            const token = await this.accessTokenProvider.getAuthorizationToken(request);
+        if (!headers?.has(BaseBearerTokenAuthenticationProvider.authorizationHeaderKey)) {
+            const token = await this.accessTokenProvider.getAuthorizationToken(url, headers);
             if (!token) {
                 throw new Error('Could not get an authorization token');
             }
-            if (!request.headers) {
-                request.headers = new Map<string, string>();
+            if (!headers) {
+                headers = new Map<string, string>();
             }
-            request.headers?.set(BaseBearerTokenAuthenticationProvider.authorizationHeaderKey, `Bearer ${token}`);
+            headers?.set(BaseBearerTokenAuthenticationProvider.authorizationHeaderKey, `Bearer ${token}`);
         }
     }
 }
