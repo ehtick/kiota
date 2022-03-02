@@ -305,6 +305,7 @@ namespace Kiota.Builder.Writers.Php
             {
                 "int" => $"$n->getIntegerValue()",
                 "bool" => "$n->getBooleanValue()",
+                "streaminterface" => $"$n->getStreamInterfaceValue()",
                 _ when conventions.PrimitiveTypes.Contains(lowerCaseType) => $"$n->get{propertyType.ToFirstCharacterUpperCase()}Value()",
                 _ => $"$n->getObjectValue({propertyType.ToFirstCharacterUpperCase()}::class)",
             };
